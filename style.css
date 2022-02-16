@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#section1{
+    height: 110px;
+}
+
+#section2{
+    height: calc(100vh - 110px);
+    width: 100%;
+    background-color: aquamarine;
+    padding: 100px 0;
+}
+
+#griglia{
+    height: 700px;
+    width: 700px;
+    margin: auto;
+}
+
+.quadrato{  
+    background-color: white;
+    border-top: 10px solid lightgray;
+    border-left: 10px solid lightgray;
+    border-bottom: 10px solid gray;
+    border-right: 10px solid gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blue{
+    background-color: rgb(82,127,233);
+    border-top: 10px solid rgb(138,166,230);
+    border-left: 10px solid rgb(138,160,230);
+    border-bottom: 10px solid rgb(45,101,232);
+    border-right: 10px solid rgb(45,101,232);
+}
