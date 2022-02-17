@@ -7,6 +7,7 @@ let punti = 0;
 const titolo = document.getElementById("titolo");
 const risultato = document.getElementById("risultato");
 const replay = document.getElementById("replay")
+let caselle = 0;
 
 
 //creo una funzione griglia
@@ -16,7 +17,6 @@ function griglia (numeroQuadrati , colonne) {
         const quadrato = document.createElement('div');
         quadrato.classList.add('quadrato');
         
-        
         quadrato.append(i);
         quadrato.style.height = `calc(100% / ${colonne})`;
         quadrato.style.width = `calc(100% / ${colonne})`;
@@ -24,9 +24,12 @@ function griglia (numeroQuadrati , colonne) {
         quadrato.addEventListener("click" , casellaSelezionata);
 
     }
+
+    caselle = numeroQuadrati;
     return quadrato;  
     
 }
+
 
 //genero griglia in base a difficoltà
 bottone.addEventListener('click', function(){
@@ -54,12 +57,17 @@ bottone.addEventListener('click', function(){
 
 } )   
 
+console.log(caselle);
 
+//reset html
 function reset() { 
     grigliaWrapper.innerHTML = "";
     risultato.style.display = "none";
+    punti = 0;
+    bombe.length = 0;
 }
 
+//funzione colori caselle
 function casellaSelezionata () {
     console.log(this);
     const element = this;
@@ -78,9 +86,13 @@ function casellaSelezionata () {
         } 
     }
     
-    if (element.classList.value.includes('red')===false){
+    if (element.classList.value.includes('red') === false){
         element.classList.add("blue");
         punti++;
+        if (punti == caselle - 16) {
+            risultato.style.display = "block";
+            titolo.innerHTML = `Complimenti, hai vinto! Il tuo punteggio è <br>${punti}`;
+        }
         console.log(punti);
     }
             
@@ -95,12 +107,7 @@ function getRandomIntInclusive (min, max) {
 }
 
 
-
-
 function creabomba (numerocaselle) {
-   
-    
-
     do {
         const numeroRandom = getRandomIntInclusive(1 , numerocaselle);
         if (bombe.includes(numeroRandom) === false ) {
@@ -112,3 +119,5 @@ function creabomba (numerocaselle) {
 }
 
 replay.addEventListener("click", reset);
+
+//in caso di vittoria
