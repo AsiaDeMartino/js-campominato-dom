@@ -2,6 +2,11 @@
 const grigliaWrapper = document.getElementById('griglia');
 const bottone = document.getElementById('play');
 const difficoltà = document.getElementById('difficoltà');
+const bombe = [];
+let punti = 0;
+const titolo = document.getElementById("titolo");
+const risultato = document.getElementById("risultato");
+const replay = document.getElementById("replay")
 
 
 //creo una funzione griglia
@@ -26,30 +31,33 @@ function griglia (numeroQuadrati , colonne) {
 //genero griglia in base a difficoltà
 bottone.addEventListener('click', function(){
 
+
     if (difficoltà.value == 1) {
         reset();
         griglia (100,10);
-        const bombe = creabomba(100);
+        creabomba(100);
         console.log(bombe);
 
     } else if (difficoltà.value == 2) {
         reset();
         griglia (81,9);
-        const bombe = creabomba(81);
+        creabomba(81);
         console.log(bombe);
 
     } else if (difficoltà.value == 3) { 
         reset();
         griglia (49,7);
-        const bombe = creabomba(49);
+        creabomba(49);
         console.log(bombe);
-        
+
     }
 
 } )   
 
+
 function reset() { 
     grigliaWrapper.innerHTML = "";
+    risultato.style.display = "none";
 }
 
 function casellaSelezionata () {
@@ -57,10 +65,27 @@ function casellaSelezionata () {
     const element = this;
 
     element.addEventListener("click" , casellaSelezionata);
-    element.classList.add("blue");
 
+    const content = element.innerHTML;
+
+    for (let i = 0; i < bombe.length; i++) {        
+        if(bombe[i] == content)
+        {
+            element.classList.add("red");
+            risultato.style.display = "block";
+            titolo.innerHTML = `Game Over! <br>Il tuo punteggio è <br>${punti}`;
+            break; 
+        } 
+    }
+    
+    if (element.classList.value.includes('red')===false){
+        element.classList.add("blue");
+        punti++;
+        console.log(punti);
+    }
+            
     element.removeEventListener("click" , casellaSelezionata);
-}
+} 
 
 //generazione bombe
 function getRandomIntInclusive (min, max) {
@@ -74,7 +99,7 @@ function getRandomIntInclusive (min, max) {
 
 function creabomba (numerocaselle) {
    
-    const bombe = [];
+    
 
     do {
         const numeroRandom = getRandomIntInclusive(1 , numerocaselle);
@@ -85,3 +110,5 @@ function creabomba (numerocaselle) {
 
     return bombe;
 }
+
+replay.addEventListener("click", reset);
