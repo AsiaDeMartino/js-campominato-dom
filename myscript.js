@@ -12,9 +12,9 @@ let caselle = 0;
 
 //creo una funzione griglia
 function griglia (numeroQuadrati , colonne) {
-    const quadrato = "";
+    let quadrato = "";
     for (let i = 1; i <= numeroQuadrati; i++) {
-        const quadrato = document.createElement('div');
+        quadrato = document.createElement('div');
         quadrato.classList.add('quadrato');
         
         quadrato.append(i);
@@ -24,40 +24,36 @@ function griglia (numeroQuadrati , colonne) {
         quadrato.addEventListener("click" , casellaSelezionata);
 
     }
-
-    caselle = numeroQuadrati;
-    return quadrato;  
     
+    caselle = numeroQuadrati;
+     
 }
 
 
 //genero griglia in base a difficoltà
 bottone.addEventListener('click', function(){
 
+    reset();
 
     if (difficoltà.value == 1) {
-        reset();
         griglia (100,10);
-        creabomba(100);
+        creaBomba(100);
         console.log(bombe);
 
     } else if (difficoltà.value == 2) {
-        reset();
         griglia (81,9);
-        creabomba(81);
+        creaBomba(81);
         console.log(bombe);
 
     } else if (difficoltà.value == 3) { 
-        reset();
         griglia (49,7);
-        creabomba(49);
+        creaBomba(49);
         console.log(bombe);
 
     }
 
-} )   
+} );
 
-console.log(caselle);
 
 //reset html
 function reset() { 
@@ -72,30 +68,26 @@ function casellaSelezionata () {
     console.log(this);
     const element = this;
 
-    element.addEventListener("click" , casellaSelezionata);
+    const content = parseInt(element.innerHTML);
 
-    const content = element.innerHTML;
-
-    for (let i = 0; i < bombe.length; i++) {        
-        if(bombe[i] == content)
-        {
-            element.classList.add("red");
-            risultato.style.display = "block";
-            titolo.innerHTML = `Game Over! <br>Il tuo punteggio è <br>${punti}`;
-            break; 
-        } 
-    }
-    
-    if (element.classList.value.includes('red') === false){
+    if(bombe.includes(content)) {
+        element.classList.add("red");
+        risultato.style.display = "block";
+        titolo.innerHTML = `Game Over! <br>Il tuo punteggio è <br>${punti}`;
+        rimuoviClick(caselle);
+        mostraBombe(caselle);
+    } else {
         element.classList.add("blue");
-        punti++;
+        punti++
+        console.log(punti);
         if (punti == caselle - 16) {
             risultato.style.display = "block";
             titolo.innerHTML = `Complimenti, hai vinto! Il tuo punteggio è <br>${punti}`;
-        }
-        console.log(punti);
+            rimuoviClick(caselle);
+            mostraBombe(caselle);
+        }    
     }
-            
+             
     element.removeEventListener("click" , casellaSelezionata);
 } 
 
@@ -107,7 +99,7 @@ function getRandomIntInclusive (min, max) {
 }
 
 
-function creabomba (numerocaselle) {
+function creaBomba (numerocaselle) {
     do {
         const numeroRandom = getRandomIntInclusive(1 , numerocaselle);
         if (bombe.includes(numeroRandom) === false ) {
@@ -118,6 +110,29 @@ function creabomba (numerocaselle) {
     return bombe;
 }
 
+function rimuoviClick(numerocaselle){
+    const quadratiDiv = document.getElementsByClassName("quadrato");
+
+    for (let i = 0; i < numerocaselle; i++) {
+        
+        quadratiDiv[i].removeEventListener("click",casellaSelezionata)  
+    }
+}
+
+function mostraBombe (numerocaselle) {
+    const quadratiDiv = document.getElementsByClassName("quadrato");
+    let i=0;
+// prendo tutti i div che sono bombe e gli do la classe red
+
+   do {
+        if(bombe.includes(parseInt(quadratiDiv[i].innerHTML))){
+            quadratiDiv[i].classList.add("red");
+            quadratiDiv[i].innerHTML = `&#127804;`;
+        }
+        i++;
+   } while (i<numerocaselle);
+}
+
 replay.addEventListener("click", reset);
 
-//in caso di vittoria
+
